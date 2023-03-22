@@ -468,7 +468,8 @@ NavbarLocation.styles = [buttonResetCSS, css`
   flex: 1;
   background: #fff;
   border: 1px solid var(--color-border-input);
-  border-radius: 4px;
+  border-radius: 30px;
+  padding:0 4px;
 }
 
 button {

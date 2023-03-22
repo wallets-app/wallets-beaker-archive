@@ -193,7 +193,7 @@ class LocationBar extends LitElement {
 }
 LocationBar.styles = [css`
 .wrapper {
-  background: #fff;
+  background: red;
   padding-bottom: 4px; /* add a little breathing room to the bottom */
 }
 

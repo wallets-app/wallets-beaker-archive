@@ -352,7 +352,7 @@ ${spinnerCSS}
 }
 
 .tab.tab-add-btn:hover {
-  background: inherit;
+
 }
 
 .tab-add-btn:hover .tab-close:before {
@@ -362,6 +362,7 @@ ${spinnerCSS}
 .tab-add-btn:hover .plus {
   background: var(--bg-tab-add--hover);
   color: var(--color-tab-add--hover);
+  border-radius:30px;
 }
 
 .tab:not(.current):hover .tab-title {
