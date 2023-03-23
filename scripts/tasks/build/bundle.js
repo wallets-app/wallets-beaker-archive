@@ -1,11 +1,9 @@
-'use strict';
-
-var pathUtil = require('path');
-var jetpack = require('fs-jetpack');
-var rollup = require('rollup');
-var Q = require('q');
-var browserify = require('browserify');
-var intoStream = require('into-stream');
+import { basename } from 'path';
+import { writeAsync } from 'fs-jetpack';
+import { rollup as _rollup } from 'rollup';
+import { defer, all } from 'q';
+import browserify from 'browserify';
+import intoStream from 'into-stream';
 
 var nodeBuiltInModules = ['assert', 'buffer', 'child_process', 'cluster',
   'console', 'constants', 'crypto', 'dgram', 'dns', 'domain', 'events',
@@ -24,10 +22,10 @@ var generateExternalModulesList = function () {
   return [].concat(nodeBuiltInModules, electronBuiltInModules, npmModulesUsedInApp());
 };
 
-module.exports = function (src, dest, opts) {
-  var deferred = Q.defer();
+export default function (src, dest, opts) {
+  var deferred = defer();
 
-  rollup.rollup({
+  _rollup({
     input: src,
     external: generateExternalModulesList(),
     onwarn (warning, warn) {
@@ -39,7 +37,7 @@ module.exports = function (src, dest, opts) {
       warn(warning)
     }
   }).then(async function (bundle) {
-    var jsFile = pathUtil.basename(dest);
+    var jsFile = basename(dest);
     var result = await bundle.generate({
       format: 'cjs',
       output: {
@@ -54,11 +52,11 @@ module.exports = function (src, dest, opts) {
       b.exclude('electron');
       if (opts.excludeNodeModules) nodeBuiltInModules.forEach(m => b.exclude(m))
       if (opts.browserifyExclude) opts.browserifyExclude.forEach(m => b.exclude(m))
-      var deferred2 = Q.defer();
+      var deferred2 = defer();
       b.bundle(function (err, bundledCode) {
         if (err) deferred2.reject(err)
         else {
-          jetpack.writeAsync(dest, bundledCode)
+          writeAsync(dest, bundledCode)
             .then(function () { deferred2.resolve() })
             .catch(function (err) { deferred2.reject(err) })
         }
@@ -69,12 +67,12 @@ module.exports = function (src, dest, opts) {
       // pollute the global namespace.
       var isolatedCode = '(function () {' + result.output[0].code + '\n}());';
       if (opts && opts.sourcemap) {
-        return Q.all([
-            jetpack.writeAsync(dest, isolatedCode + '\n//# sourceMappingURL=' + jsFile + '.map'),
-            jetpack.writeAsync(dest + '.map', result.output[0].map.toString()),
+        return all([
+            writeAsync(dest, isolatedCode + '\n//# sourceMappingURL=' + jsFile + '.map'),
+            writeAsync(dest + '.map', result.output[0].map.toString()),
           ]);
       }
-      return jetpack.writeAsync(dest, isolatedCode)
+      return writeAsync(dest, isolatedCode)
     }
   }).then(function () {
     deferred.resolve();
