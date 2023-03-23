@@ -14,7 +14,7 @@ Looking to work on Beaker? [Watch this video](https://www.youtube.com/watch?v=Yu
 
 ## Building from source
 
-Requires node 6 or higher. On Windows, you may need to use npm version 4, due to a bug in npm 5.
+Requires node 12 or higher.
 
 In Linux (and in some cases macOS) you need libtool, m4, and automake:
 
@@ -36,7 +36,7 @@ To build:
 
 ```bash
 git clone https://github.com/beakerbrowser/beaker.git
-cd beaker
+cd beaker/scripts
 npm install
 npm run rebuild # see https://github.com/electron/electron/issues/5851
 npm start
@@ -55,27 +55,11 @@ If you're doing development, `npm run watch` to have assets build automatically.
 
 ### Debugging
 
-To debug the background process start electron with the `--inspect` argument pointing to the `app` directory, e.g. `node_modules/.bin/electron --inspect app`.  You can then attach an external debugger (e.g. Chrome devtools).
+To debug the background process start electron with the `--inspect` argument pointing to the `app` directory, e.g. `script/node_modules/.bin/electron --inspect app`.  You can then attach an external debugger (e.g. Chrome devtools).
 
 To debug the shell window itself (i.e. the beaker browser chrome), press `CmdOrCtrl+alt+shift+I` to open the devtools.
 
 To debug a built-in pages (e.g. the Settings or Library pages), press `CmdOrCtrl+shift+I` to open the devtools.
-
-## Running the tests
-
-Tests use their own package.json:
-
-```
-cd tests
-npm install
-```
-
-To run:
-
-```
-cd tests
-npm test
-```
 
 ## Submitting code
 
