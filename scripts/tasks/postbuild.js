@@ -1,6 +1,6 @@
 var gulp = require('gulp')
 var jetpack = require('fs-jetpack')
-var run = require('./util-run')
+var run = require('./util-run').default
 
 gulp.task('postbuild', gulp.series(function () {
   // for some reason, electron-builder is spitting out 'Beaker Browser-{version}{ext}'
